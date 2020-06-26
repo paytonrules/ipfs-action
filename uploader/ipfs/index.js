@@ -12,10 +12,12 @@ async function upload(options) {
   const files = await all(globSource(path, { recursive: true })).catch((err) => { throw err; });
   const source = await all(ipfs.add(files, { pin: true, timeout })).catch((err) => { throw err; });
 
+  console.log('root is', root);
   for await (const file of source) {
     if (verbose)
       console.log(file.path, file.cid.toString())
 
+    console.log("root to path", root, file.path);
     if (root === file.path)
       rootHash = file.cid.toString();
   }
